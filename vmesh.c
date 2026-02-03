@@ -21,7 +21,7 @@ uint32_t VMESH_FloatsCount(Mesh* mesh) {
 }
 
 uint32_t VMESH_VertexCount(Mesh* mesh) {
-    return mesh->floats_count/3;
+    return mesh->floats_count/mesh->vertex_size;
 }
 
 uint32_t* VMESH_Faces(Mesh* mesh) {
@@ -49,6 +49,7 @@ void iVMESH_CountVerticesAndFaces(char* path, uint32_t* vertices, uint32_t *face
 	while (c!= '\n' && c != EOF) {
 	    c = fgetc(file);
 	}
+	if (c == EOF) break;
     }
     fclose(file);
 }
@@ -64,26 +65,20 @@ Mesh *VMESH_LoadObj(char* path) {
     iVMESH_CountVerticesAndFaces(path, &vertex_count, &face_count);
     printf("vertices: %d, faces: %d\n", vertex_count, face_count);
     
-    uint32_t floats = mesh->vertex_size * vertex_count;
-    mesh->vertices = malloc(sizeof(float)*floats);
-    mesh->floats_count = face_count;
-    vertex = mesh->vertices;
+    uint32_t floats_count = mesh->vertex_size * vertex_count;
+    mesh->vertices = malloc(sizeof(float)*floats_count);
+    mesh->floats_count = floats_count;
+
     
-    uint32_t indices = face_count * 3;
-    mesh->faces = malloc(sizeof(uint32_t)*indices);
-    mesh->index_count = indices;
+    uint32_t index_count = face_count*3;
+    mesh->faces = malloc(sizeof(uint32_t)*index_count);
+    mesh->index_count = index_count;
+
+    vertex = mesh->vertices;    
     index = mesh->faces;
-    
     while ((c = fgetc(file)) != EOF) {
 	if (c == '#') {
-	    fgetc(file);
-	    c = fgetc(file);
-	    if (c == 'O') {
-		fscanf(file, "BJ file format with ext .obj\n");
-	    } else if (c == 'f') {
-	    }
-	    
-	    if (c == '\n') fgetc(file);
+	    while (c != '\n' && c != EOF) c = fgetc(file);
 	} else if (c == 'v') {
 	    float x, y, z;
 	    fscanf(file, " %f %f %f", &x, &y, &z);
