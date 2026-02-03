@@ -9,6 +9,14 @@ struct Mesh {
     uint32_t *indices;
 };
 
+float* VMESH_VerticesGet(Mesh* mesh) {
+    return mesh->vertices;
+}
+
+uint32_t* VMESH_IndicesGet(Mesh* mesh) {
+    return mesh->indices;
+}
+
 Mesh *VMESH_LoadObj(char* path) {
     Mesh *mesh  = malloc(sizeof(Mesh));
     FILE* file = fopen(path, "r");
@@ -56,6 +64,9 @@ Mesh *VMESH_LoadObj(char* path) {
 	} else if (c == 'f') {
 	    uint32_t x, y, z;
 	    fscanf(file, " %d %d %d\n", &x, &y, &z);
+	    x -= 1;
+	    y -= 1;
+	    z -= 1;
 	    printf("%d, %d, %d\n", x, y, z);
 
 	    *index++ = x;
