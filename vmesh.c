@@ -7,14 +7,24 @@
 struct Mesh {
     float *vertices;
     uint32_t *indices;
+    uint32_t index_count;
+    uint32_t vertex_count;
 };
 
-float* VMESH_VerticesGet(Mesh* mesh) {
+float* VMESH_Vertices(Mesh* mesh) {
     return mesh->vertices;
 }
 
-uint32_t* VMESH_IndicesGet(Mesh* mesh) {
+uint32_t VMESH_VerticesSize(Mesh* mesh) {
+    return mesh->vertex_count;
+}
+
+uint32_t* VMESH_Indices(Mesh* mesh) {
     return mesh->indices;
+}
+
+uint32_t VMESH_IndicesSize(Mesh* mesh) {
+    return mesh->index_count;
 }
 
 Mesh *VMESH_LoadObj(char* path) {
@@ -34,11 +44,13 @@ Mesh *VMESH_LoadObj(char* path) {
 		int vertices;
 		fscanf(file, "ertex count = %d\n", &vertices);
 		mesh->vertices = malloc(sizeof(float)*vertices);
+		mesh->vertex_count = vertices;
 		vertex = mesh->vertices;
 	    } else if (c == 'f') {
 		int indices;
 		fscanf(file, "ace count = %d\n", &indices);
 		mesh->indices = malloc(sizeof(uint32_t)*indices);
+		mesh->index_count = indices;
 		index = mesh->indices;
 	    }
 	    
