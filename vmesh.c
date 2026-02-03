@@ -52,7 +52,7 @@ Mesh *VMESH_LoadObj(char* path) {
 	       
 	    } else if (c == 'v') {
 		int floats;
-		fscanf(file, "ertex count = %d\n", &vertices);
+		fscanf(file, "ertex count = %d\n", &floats);
 		floats *= mesh->vertex_size;
 		mesh->vertices = malloc(sizeof(float)*floats);
 		mesh->floats_count = floats;
@@ -61,9 +61,9 @@ Mesh *VMESH_LoadObj(char* path) {
 		int indices;
 		fscanf(file, "ace count = %d\n", &indices);
 		indices *= 3;
-		mesh->indices = malloc(sizeof(uint32_t)*indices);
+		mesh->faces = malloc(sizeof(uint32_t)*indices);
 		mesh->index_count = indices;
-		index = mesh->indices;
+		index = mesh->faces;
 	    }
 	    
 	    if (c == '\n') fgetc(file);
