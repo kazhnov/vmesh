@@ -28,11 +28,11 @@ uint32_t* VMESH_Faces(Mesh* mesh) {
     return mesh->faces;
 }
 
-uint32_t VMESH_IndicesSize(Mesh* mesh) {
+uint32_t VMESH_IndicesCount(Mesh* mesh) {
     return mesh->index_count;
 }
 
-uint32_t VMESH_FacesCound(Mesh* mesh) {
+uint32_t VMESH_FacesCount(Mesh* mesh) {
     return mesh->index_count/3;
 }
 
