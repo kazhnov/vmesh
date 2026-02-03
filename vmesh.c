@@ -71,12 +71,15 @@ Mesh *VMESH_LoadObj(char* path) {
 	    float x, y, z;
 	    fscanf(file, " %f %f %f", &x, &y, &z);
 	    float r, g, b, a;
-	    
+	    a = 1.0f;
+	    fgetc(file);
+	    /*
 	    if (fgetc(file) == ' ') {
 		fscanf(file, "%f %f %f %f\n", &r, &g, &b, &a);
 	    }
+	    */
 	    
-	    printf("%f, %f, %f %f %f %f %f\n", x, y, z, r, g, b, a);
+	    printf("%f, %f, %f\n", x, y, z);
 	    
 	    *vertex++ = x;
 	    *vertex++ = y;
