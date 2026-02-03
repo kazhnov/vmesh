@@ -14,5 +14,6 @@ uint32_t VMESH_IndicesCount(Mesh* mesh);
 
 uint32_t VMESH_FacesCount(Mesh* mesh);
 
-
 Mesh *VMESH_LoadObj(char* path);
+
+void VMESH_Destroy(Mesh* mesh);

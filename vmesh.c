@@ -58,9 +58,9 @@ Mesh *VMESH_LoadObj(char* path) {
 		mesh->floats_count = floats;
 		vertex = mesh->vertices;
 	    } else if (c == 'f') {
-		int indices;
-		fscanf(file, "ace count = %d\n", &indices);
-		indices *= 3;
+		int indices, faces;
+		fscanf(file, "ace count = %d\n", &faces);
+		indices = faces * 3;
 		mesh->faces = malloc(sizeof(uint32_t)*indices);
 		mesh->index_count = indices;
 		index = mesh->faces;
@@ -103,4 +103,10 @@ Mesh *VMESH_LoadObj(char* path) {
     }
 
     return mesh;
+}
+
+void VMESH_Destroy(Mesh* mesh) {
+    free(mesh->faces);
+    free(mesh->vertices);
+    free(mesh);
 }
