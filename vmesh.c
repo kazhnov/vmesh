@@ -107,16 +107,14 @@ Mesh *VMESH_LoadObj(char* path) {
 	} else if (c == 'v') {
 	    c = fgetc(file);
 	    if (c == 'n') {
-		float x, y, z, a;
+		float x, y, z;
 		fscanf(file, "%f %f %f", &x, &y, &z);
-//		printf("normal: %f, %f, %f\n", x, y, z);
-		a = 1.0;
 		fgetc(file);
 		
-		mesh->normals[normal*mesh->vertex_size+0] = x;
-		mesh->normals[normal*mesh->vertex_size+1] = y;
-		mesh->normals[normal*mesh->vertex_size+2] = z;
-		mesh->normals[normal*mesh->vertex_size+3] = a;
+		mesh->normals[normal*4+0] = x;
+		mesh->normals[normal*4+1] = y;
+		mesh->normals[normal*4+2] = z;
+		mesh->normals[normal*4+3] = 1.0f;
 		
 		normal++;
 	    } else {
@@ -149,5 +147,7 @@ Mesh *VMESH_LoadObj(char* path) {
 void VMESH_Destroy(Mesh* mesh) {
     free(mesh->faces);
     free(mesh->vertices);
+    if (mesh->has_normals)
+	free(mesh->normals);
     free(mesh);
 }
