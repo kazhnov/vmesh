@@ -93,7 +93,8 @@ Mesh *VMESH_LoadObj(char* path) {
 	    c = fgetc(file);
 	    if (c == 'n') {
 		float x, y, z, a;
-		fscanf(file, "%f %f %f\n", &x, &y, &z);
+		fscanf(file, "%f %f %f", &x, &y, &z);
+		printf("normal: %f, %f, %f\n", x, y, z);
 		a = 1.0;
 		fgetc(file);
 		
@@ -105,7 +106,7 @@ Mesh *VMESH_LoadObj(char* path) {
 		normal++;
 	    } else {
 		float x, y, z;
-		fscanf(file, "%f %f %f\n", &x, &y, &z);
+		fscanf(file, "%f %f %f", &x, &y, &z);
 		fgetc(file);
 		mesh->vertices[vertex*mesh->vertex_size+0] = x;
 		mesh->vertices[vertex*mesh->vertex_size+1] = y;
