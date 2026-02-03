@@ -77,8 +77,3 @@ Mesh *VMESH_LoadObj(char* path) {
 
     return mesh;
 }
-
-
-int main() {
-    Mesh* mesh = VMESH_LoadObj("bunny.obj");
-}
