@@ -2,7 +2,6 @@
 struct Mesh;
 typedef struct Mesh Mesh;
 
-
 float* VMESH_Vertices(Mesh* mesh);
 
 uint32_t VMESH_FloatsCount(Mesh* mesh);
