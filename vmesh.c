@@ -86,7 +86,7 @@ Mesh *VMESH_LoadObj(char* path) {
 	    printf("vertex count and normal count are not the same!\n");
 	    return NULL;
 	}
-	mesh->normals = calloc(sizeof(float), floats_count);
+	mesh->normals = calloc(sizeof(float), vertex_count*4);
     }
 
     mesh->vertices = calloc(sizeof(float),floats_count);
@@ -127,16 +127,25 @@ Mesh *VMESH_LoadObj(char* path) {
 		vertex++;
 	    }
 	} else if (c == 'f') {
-	    uint32_t x, y, z;
-	    fscanf(file, " %d %d %d\n", &x, &y, &z);
-	    x -= 1;
-	    y -= 1;
-	    z -= 1;
-//	    printf("%d, %d, %d\n", x, y, z);
+	    int f[3];
+	    fgetc(file);
+	    for(int i = 0; i < 3; i++) {
+		fscanf(file, "%d", f+i);
+		c = fgetc(file);
+		while (!isdigit(c)) {
+		    //printf("%c", c);
+		    c = fgetc(file);
+		}
+		ungetc(c, file);
+		fscanf(file, "%d", f+i);
+//		printf("%d ", f[i]);
+	    }
+	    
+//	    printf("%d, %d, %d\n", f[0], f[1], f[2]);
 
-	    *index++ = x;
-	    *index++ = y;
-	    *index++ = z;
+	    *index++ = f[0] - 1;
+	    *index++ = f[1] - 1;
+	    *index++ = f[2] - 1;
 	}	
     }
 
