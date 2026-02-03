@@ -8,6 +8,10 @@ uint32_t VMESH_FloatsCount(Mesh* mesh);
 
 uint32_t VMESH_VertexCount(Mesh* mesh);
 
+bool VMESH_HasNormals(Mesh* mesh);
+
+float* VMESH_Normals(Mesh* mesh);
+
 uint32_t* VMESH_Faces(Mesh* mesh);
 
 uint32_t VMESH_IndicesCount(Mesh* mesh);
