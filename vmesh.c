@@ -6,6 +6,7 @@
 
 struct Mesh {
     float *vertices;
+    float *normals;
     uint32_t *faces;
     uint32_t index_count;
     uint32_t floats_count;
@@ -61,27 +62,30 @@ void iVMESH_CountVerticesAndFaces(char* path, uint32_t* vertices, uint32_t *face
 
 Mesh *VMESH_LoadObj(char* path) {
     Mesh *mesh  = malloc(sizeof(Mesh));
-    mesh->vertex_size = 3+4;
+    mesh->vertex_size = 3;
     FILE* file = fopen(path, "r");
     char c;
     uint32_t *index;
     uint32_t vertex_count, face_count, normal_count;
     iVMESH_CountVerticesAndFaces(path, &vertex_count, &face_count, &normal_count);
     printf("vertices: %d, faces: %d, normals: %d\n", vertex_count, face_count, normal_count);
-
-    if (vertex_count != 0 && vertex_count != normal_count) {
-	printf("vertex count and normal count are not the same!\n");
-	return NULL;
-    }
-    
     uint32_t floats_count = mesh->vertex_size * vertex_count;
+    if (normal_count != 0) {
+	if (vertex_count != normal_count) {
+	    printf("vertex count and normal count are not the same!\n");
+	    return NULL;
+	}
+	mesh->normals = calloc(sizeof(float), floats_count);
+    }
+
     mesh->vertices = calloc(sizeof(float),floats_count);
     mesh->floats_count = floats_count;
+    
+    
     
     uint32_t index_count = face_count*3;
     mesh->faces = calloc(sizeof(uint32_t), index_count);
     mesh->index_count = index_count;
-
     
     uint32_t vertex = 0;
     uint32_t normal = 0;
@@ -94,14 +98,14 @@ Mesh *VMESH_LoadObj(char* path) {
 	    if (c == 'n') {
 		float x, y, z, a;
 		fscanf(file, "%f %f %f", &x, &y, &z);
-		printf("normal: %f, %f, %f\n", x, y, z);
+//		printf("normal: %f, %f, %f\n", x, y, z);
 		a = 1.0;
 		fgetc(file);
 		
-		mesh->vertices[normal*mesh->vertex_size+3] = x;
-		mesh->vertices[normal*mesh->vertex_size+4] = y;
-		mesh->vertices[normal*mesh->vertex_size+5] = z;
-		mesh->vertices[normal*mesh->vertex_size+6] = a;
+		mesh->normals[normal*mesh->vertex_size+0] = x;
+		mesh->normals[normal*mesh->vertex_size+1] = y;
+		mesh->normals[normal*mesh->vertex_size+2] = z;
+		mesh->normals[normal*mesh->vertex_size+3] = a;
 		
 		normal++;
 	    } else {
