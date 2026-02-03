@@ -79,7 +79,7 @@ Mesh *VMESH_LoadObj(char* path) {
 	    }
 	    */
 	    
-	    printf("%f, %f, %f\n", x, y, z);
+//	    printf("%f, %f, %f\n", x, y, z);
 	    
 	    *vertex++ = x;
 	    *vertex++ = y;
@@ -94,7 +94,7 @@ Mesh *VMESH_LoadObj(char* path) {
 	    x -= 1;
 	    y -= 1;
 	    z -= 1;
-	    printf("%d, %d, %d\n", x, y, z);
+//	    printf("%d, %d, %d\n", x, y, z);
 
 	    *index++ = x;
 	    *index++ = y;
