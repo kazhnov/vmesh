@@ -3,10 +3,9 @@
 
 int main() {    
     Mesh* mesh =VMESH_LoadObj("bunny.obj");
-    printf("vertices: %d, faces: %d\n", VMESH_VertexCount(mesh), VMESH_IndicesCount(mesh));
-    float* normals = VMESH_Normals(mesh);
+    Vertex *vertices = VMESH_Vertices(mesh);
     for(int i = 0; i < 100; i++) {
-	printf("%f %f %f\n", normals[i*3+0], normals[i*3+1], normals[i*3+2]);
+	printf("%f %f %f\n", vertices[i].pos[0], vertices[i].pos[1], vertices[i].pos[2]);
     }
     printf("OK\n");
     return 0;
