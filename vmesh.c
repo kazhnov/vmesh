@@ -30,6 +30,9 @@ uint32_t VMESH_IndicesCount(Mesh* mesh) {
     return mesh->index_count;
 }
 
+uint32_t* VMESH_Indices(Mesh *mesh) {
+    return mesh->indices;
+}
 
 void iVMESH_CountVNTF(FILE* file, uint32_t* vert_count, uint32_t *face_count, uint32_t *uv_count, uint32_t *normal_count) {
     rewind(file);
