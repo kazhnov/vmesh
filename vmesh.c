@@ -11,6 +11,7 @@ struct Mesh {
     uint32_t index_count;
     uint32_t floats_count;
     uint32_t vertex_size;
+    uint32_t normal_size;
     bool has_normals;
 };
 
@@ -72,27 +73,26 @@ void iVMESH_CountVerticesAndFaces(char* path, uint32_t* vertices, uint32_t *face
 Mesh *VMESH_LoadObj(char* path) {
     Mesh *mesh  = malloc(sizeof(Mesh));
     mesh->vertex_size = 3;
+    mesh->normal_size = 3;
+    mesh->normals = NULL;
+    
     FILE* file = fopen(path, "r");
     char c;
     uint32_t *index;
     uint32_t vertex_count, face_count, normal_count;
     iVMESH_CountVerticesAndFaces(path, &vertex_count, &face_count, &normal_count);
     printf("vertices: %d, faces: %d, normals: %d\n", vertex_count, face_count, normal_count);
-    uint32_t floats_count = mesh->vertex_size * vertex_count;
-    mesh->has_normals = 0;
+    uint32_t floats_count = vertex_count*mesh->vertex_size;
     if (normal_count != 0) {
-	mesh->has_normals = 1;
 	if (vertex_count != normal_count) {
 	    printf("vertex count and normal count are not the same!\n");
 	    return NULL;
 	}
-	mesh->normals = calloc(sizeof(float), vertex_count*4);
+	mesh->normals = calloc(sizeof(float), vertex_count*mesh->normal_size);
     }
 
     mesh->vertices = calloc(sizeof(float),floats_count);
     mesh->floats_count = floats_count;
-    
-    
     
     uint32_t index_count = face_count*3;
     mesh->faces = calloc(sizeof(uint32_t), index_count);
@@ -110,12 +110,11 @@ Mesh *VMESH_LoadObj(char* path) {
 		float x, y, z;
 		fscanf(file, "%f %f %f", &x, &y, &z);
 		fgetc(file);
-		
-		mesh->normals[normal*4+0] = x;
-		mesh->normals[normal*4+1] = y;
-		mesh->normals[normal*4+2] = z;
-		mesh->normals[normal*4+3] = 1.0f;
-		
+
+		uint32_t npos = normal*mesh->normal_size;
+		mesh->normals[npos+0] = x;
+		mesh->normals[npos+1] = y;
+		mesh->normals[npos+2] = z;		
 		normal++;
 	    } else {
 		float x, y, z;
@@ -133,16 +132,12 @@ Mesh *VMESH_LoadObj(char* path) {
 		fscanf(file, "%d", f+i);
 		c = fgetc(file);
 		while (!isdigit(c)) {
-		    //printf("%c", c);
 		    c = fgetc(file);
 		}
 		ungetc(c, file);
 		fscanf(file, "%d", f+i);
-//		printf("%d ", f[i]);
 	    }
 	    
-//	    printf("%d, %d, %d\n", f[0], f[1], f[2]);
-
 	    *index++ = f[0] - 1;
 	    *index++ = f[1] - 1;
 	    *index++ = f[2] - 1;
