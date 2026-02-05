@@ -75,6 +75,8 @@ Index* iVMESH_ParseObjIndices(FILE *file, uint32_t face_count,
     rewind(file);
     Index* indices = calloc(face_count*3, sizeof(Index));
     printf("face_count: %d\n", face_count);
+    printf("normal_count: %d\n", ncount);
+    printf("pos_count: %d\n", vcount);
 
     *positions = calloc(vcount*3, sizeof(float));
     if (tcount) {
@@ -175,9 +177,9 @@ Mesh* VMESH_LoadObj(char* path) {
 					    &normals, normal_count,
 					    &uvs, uv_count
 	); // get indices
-    Index* lookup_table = calloc(face_count*3, sizeof(Index));
+    Index* lookup_table = malloc(face_count*3 * sizeof(Index));
     memset(lookup_table, 0xFC, face_count*3*sizeof(Index));
-    uint32_t* mapped_indices = calloc(face_count*3, sizeof(uint32_t));
+    uint32_t* mapped_indices = malloc(face_count*3 * sizeof(uint32_t));
     memset(mapped_indices, 0xFC, face_count*3*sizeof(uint32_t));
     
     for(int i = 0; i < face_count*3; i++) {
@@ -187,12 +189,12 @@ Mesh* VMESH_LoadObj(char* path) {
 	// real indices map from indices triplets to just vertices
 //	printf("index: %u mapped to %u%u\n", (indices[i]), (mapped_indices[i]));
     }
-    printf("\n");
+//    printf("\n");
 
     uint32_t out_vertex_count;
     for(out_vertex_count = 0; out_vertex_count < face_count*3; out_vertex_count++) {
 	if (lookup_table[out_vertex_count].pos == 0xFCFCFCFC) {
-	    printf("vertex_count: %d\n", out_vertex_count);
+//	    printf("vertex_count: %d\n", out_vertex_count);
 	    break;
 	}
     }
@@ -205,21 +207,27 @@ Mesh* VMESH_LoadObj(char* path) {
 	mesh_indices[i] = mapped_indices[i];
     }
 
-    printf("VERTICES:\n");
+//    printf("VERTICES:\n");
     Vertex* vertices = calloc(table_len, sizeof(Vertex));
     for(int i = 0; i < face_count*3; i++) {
 	uint32_t j = mesh_indices[i];
 	uint32_t p = lookup_table[j].pos - 1;
 	uint32_t n = lookup_table[j].normal - 1;
 	uint32_t t = lookup_table[j].tex - 1;
-	printf("%d maps to %d with position %d\n", i, j, p);
+//	printf("%d maps to %d with position %d\n", i, j, p);
 
 	vertices[j].pos[0] = positions[3*p+0];
 	vertices[j].pos[1] = positions[3*p+1];
 	vertices[j].pos[2] = positions[3*p+2];
-					   
-//	    .normal = {normals[n*3+0], normals[n*3+1], normals[n*3+2]},
-//	    };
+
+//	printf("a\n");
+	if (normal_count) {
+//	    printf("%f\n", vertices[i].normal[1]);
+	    vertices[j].normal[0] = normals[n*3+0];
+	    vertices[j].normal[1] = normals[n*3+1];
+	    vertices[j].normal[2] = normals[n*3+2];
+	}
+//	printf("b\n");
 	if (uv_count) {
 	    vertices[j].tex[0] = uvs[t*3+0];
 	    vertices[j].tex[1] = uvs[t*2+1];
@@ -233,7 +241,7 @@ Mesh* VMESH_LoadObj(char* path) {
     mesh->indices = mesh_indices;
     mesh->vertex_count = out_vertex_count;
     mesh->index_count = face_count*3;
-    printf(" ended\n\n");
+//    printf(" ended\n\n");
 
     free(mapped_indices);	
     free(lookup_table);
