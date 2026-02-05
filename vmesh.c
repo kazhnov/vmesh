@@ -221,15 +221,14 @@ Mesh* VMESH_LoadObj(char* path) {
 	vertices[j].pos[2] = positions[3*p+2];
 
 //	printf("a\n");
-	if (normal_count) {
 //	    printf("%f\n", vertices[i].normal[1]);
-	    vertices[j].normal[0] = normals[n*3+0];
-	    vertices[j].normal[1] = normals[n*3+1];
-	    vertices[j].normal[2] = normals[n*3+2];
-	}
+	vertices[j].normal[0] = normals[3*n+0];
+	vertices[j].normal[1] = normals[3*n+1];
+	vertices[j].normal[2] = normals[3*n+2];
 //	printf("b\n");
 	if (uv_count) {
-	    vertices[j].tex[0] = uvs[t*3+0];
+	    vertices[j].tex[0] = uvs[t*2
+				     +0];
 	    vertices[j].tex[1] = uvs[t*2+1];
 	}
 //	printf("%f %f %f\n", vertices[j].pos[0], vertices[j].pos[1], vertices[j].pos[2]);
