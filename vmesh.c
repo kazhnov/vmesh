@@ -200,15 +200,18 @@ Mesh* VMESH_LoadObj(char* path) {
     uint32_t table_len;
 
     uint32_t *mesh_indices = malloc(face_count*3 * sizeof(uint32_t));
-    memcpy(mesh_indices, mapped_indices, face_count*3*sizeof(uint32_t));
+    for (int i = 0; i < face_count*3; i++) {
+//	memcpy(mesh_indices, mapped_indices, face_count*3*sizeof(uint32_t));
+	mesh_indices[i] = mapped_indices[i];
+    }
 
     printf("VERTICES:\n");
     Vertex* vertices = calloc(table_len, sizeof(Vertex));
     for(int i = 0; i < face_count*3; i++) {
 	uint32_t j = mesh_indices[i];
-	uint32_t p = lookup_table[j].pos;
-	uint32_t n = lookup_table[j].normal;
-	uint32_t t = lookup_table[j].tex;
+	uint32_t p = lookup_table[j].pos - 1;
+	uint32_t n = lookup_table[j].normal - 1;
+	uint32_t t = lookup_table[j].tex - 1;
 	printf("%d maps to %d with position %d\n", i, j, p);
 
 	vertices[j].pos[0] = positions[3*p+0];

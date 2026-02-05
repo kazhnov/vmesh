@@ -2,10 +2,12 @@
 #include <stdio.h>
 
 int main() {    
-    Mesh* mesh =VMESH_LoadObj("bunny.obj");
+    Mesh* mesh =VMESH_LoadObj("teapot_normals.obj");
     Vertex *vertices = VMESH_Vertices(mesh);
+    uint32_t *index = VMESH_Indices(mesh);
     for(int i = 0; i < 100; i++) {
-	printf("%f %f %f\n", vertices[i].pos[0], vertices[i].pos[1], vertices[i].pos[2]);
+	int j = index[i];
+	printf("%d: %f %f %f\n", j, vertices[j].pos[0], vertices[j].pos[1], vertices[j].pos[2]);
     }
     printf("OK\n");
     return 0;
