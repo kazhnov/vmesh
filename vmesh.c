@@ -182,7 +182,7 @@ Mesh* VMESH_LoadObj(char* path) {
 					   indices+i,
 					   face_count);
 	// real indices map from indices triplets to just vertices
-	printf("%d\n", mapped_indices[i]);
+	printf("index %u mapped to %u%u\n", (indices[i]), (mapped_indices[i]));
     }
 
     uint32_t out_vertex_count;
