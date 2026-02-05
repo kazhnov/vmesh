@@ -93,21 +93,18 @@ Index* iVMESH_ParseObjIndices(FILE *file, uint32_t face_count,
 	    if (c == ' ') { // v %f %f %f
 		float x, y, z;
 		fscanf(file, "%f %f %f\n", &x, &y, &z);
-//		printf("v %f %f %f\n", x, y, z);
 		(*positions)[cur_pos++] = x;
 		(*positions)[cur_pos++] = y;
 		(*positions)[cur_pos++] = z;
 	    } else if (c == 'n') { // vn %f %f %f
 		float x, y, z;
 		fscanf(file, " %f %f %f\n", &x, &y, &z);
-//		printf("vn %f %f %f\n", x, y, z);
 		(*normals)[cur_normal++] = x;
 		(*normals)[cur_normal++] = y;
 		(*normals)[cur_normal++] = z;
 	    } else if (c == 't') { // vt %f %f %f
 		float x, y;
 		fscanf(file, " %f %f\n", &x, &y);
-//		printf("vt %f %f\n", x, y);
 		(*uvs)[cur_uv++] = x;
 		(*uvs)[cur_uv++] = y;
 	    }
@@ -130,7 +127,6 @@ Index* iVMESH_ParseObjIndices(FILE *file, uint32_t face_count,
 	    }
 	    
 	    fscanf(file, "%d", &vn);
-//	    printf("%d/%d/%d\n", v, vt, vn);
 	    indices[cur_index].pos = v;
 	    indices[cur_index].normal = vn;
 	    indices[cur_index].tex = vt;
@@ -166,6 +162,7 @@ uint32_t iVMESH_TableFind(Index* table, Index* index, uint32_t face_count) {
 }
 
 Mesh* VMESH_LoadObj(char* path) {
+    printf("loading model %s..\n", path);
     FILE* file = fopen(path, "r");
     uint32_t vert_count, face_count, uv_count, normal_count;
     iVMESH_CountVNTF(file, &vert_count, &face_count, &uv_count, &normal_count);
@@ -187,14 +184,11 @@ Mesh* VMESH_LoadObj(char* path) {
 					   indices+i,
 					   face_count);
 	// real indices map from indices triplets to just vertices
-//	printf("index: %u mapped to %u%u\n", (indices[i]), (mapped_indices[i]));
     }
-//    printf("\n");
 
     uint32_t out_vertex_count;
     for(out_vertex_count = 0; out_vertex_count < face_count*3; out_vertex_count++) {
 	if (lookup_table[out_vertex_count].pos == 0xFCFCFCFC) {
-//	    printf("vertex_count: %d\n", out_vertex_count);
 	    break;
 	}
     }
@@ -203,11 +197,9 @@ Mesh* VMESH_LoadObj(char* path) {
 
     uint32_t *mesh_indices = malloc(face_count*3 * sizeof(uint32_t));
     for (int i = 0; i < face_count*3; i++) {
-//	memcpy(mesh_indices, mapped_indices, face_count*3*sizeof(uint32_t));
 	mesh_indices[i] = mapped_indices[i];
     }
 
-//    printf("VERTICES:\n");
     Vertex* vertices = calloc(table_len, sizeof(Vertex));
     for(int i = 0; i < face_count*3; i++) {
 	uint32_t j = mesh_indices[i];
@@ -220,18 +212,14 @@ Mesh* VMESH_LoadObj(char* path) {
 	vertices[j].pos[1] = positions[3*p+1];
 	vertices[j].pos[2] = positions[3*p+2];
 
-//	printf("a\n");
-//	    printf("%f\n", vertices[i].normal[1]);
 	vertices[j].normal[0] = normals[3*n+0];
 	vertices[j].normal[1] = normals[3*n+1];
 	vertices[j].normal[2] = normals[3*n+2];
-//	printf("b\n");
 	if (uv_count) {
 	    vertices[j].tex[0] = uvs[t*2
 				     +0];
 	    vertices[j].tex[1] = uvs[t*2+1];
 	}
-//	printf("%f %f %f\n", vertices[j].pos[0], vertices[j].pos[1], vertices[j].pos[2]);
     }
     
     
@@ -240,12 +228,16 @@ Mesh* VMESH_LoadObj(char* path) {
     mesh->indices = mesh_indices;
     mesh->vertex_count = out_vertex_count;
     mesh->index_count = face_count*3;
-//    printf(" ended\n\n");
 
     free(mapped_indices);	
     free(lookup_table);
     free(indices);
+    free(positions);
+    free(normals);
+    free(uvs);
     fclose(file);
+    
+    printf("loaded model %s\n", path);
     return mesh;
 }
 

@@ -2,7 +2,7 @@
 #include <stdio.h>
 
 int main() {    
-    Mesh* mesh =VMESH_LoadObj("teapot_normals.obj");
+    Mesh* mesh =VMESH_LoadObj("../vmesh/teapot_normals.obj");
     Vertex *vertices = VMESH_Vertices(mesh);
     uint32_t *index = VMESH_Indices(mesh);
     for(int i = 0; i < 100; i++) {
