@@ -211,9 +211,9 @@ Mesh* VMESH_LoadObj(char* path) {
 	uint32_t t = lookup_table[j].tex;
 	printf("%d maps to %d with position %d\n", i, j, p);
 
-	vertices[j].pos[0] = positions[p+0];
-	vertices[j].pos[1] = positions[p+1];
-	vertices[j].pos[2] = positions[p+2];
+	vertices[j].pos[0] = positions[3*p+0];
+	vertices[j].pos[1] = positions[3*p+1];
+	vertices[j].pos[2] = positions[3*p+2];
 					   
 //	    .normal = {normals[n*3+0], normals[n*3+1], normals[n*3+2]},
 //	    };
@@ -221,7 +221,7 @@ Mesh* VMESH_LoadObj(char* path) {
 	    vertices[j].tex[0] = uvs[t*3+0];
 	    vertices[j].tex[1] = uvs[t*2+1];
 	}
-	printf("%f %f %f\n", vertices[j].pos[0], vertices[j].pos[1], vertices[j].pos[1]);
+	printf("%f %f %f\n", vertices[j].pos[0], vertices[j].pos[1], vertices[j].pos[2]);
     }
     
     
