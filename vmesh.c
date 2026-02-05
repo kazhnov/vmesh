@@ -74,10 +74,9 @@ Index* iVMESH_ParseObjIndices(FILE *file, uint32_t face_count,
     ) {
     rewind(file);
     Index* indices = calloc(face_count*3, sizeof(Index));
-    printf("face_count: %d\n", face_count);
-    printf("normal_count: %d\n", ncount);
-    printf("pos_count: %d\n", vcount);
-
+    printf("Getting Data.. ");
+    fflush(stdout);
+    
     *positions = calloc(vcount*3, sizeof(float));
     if (tcount) {
 	*uvs = calloc(tcount*2, sizeof(float));
@@ -115,7 +114,6 @@ Index* iVMESH_ParseObjIndices(FILE *file, uint32_t face_count,
 	for (int i = 0; i < 3; i++) {
 	    
 	    uint32_t v = 0, vt = 0, vn = 0;
-	
 	    fscanf(file, "%d", &v);
 	    c = getc(file);
 	    assert(c == '/');
@@ -136,6 +134,7 @@ Index* iVMESH_ParseObjIndices(FILE *file, uint32_t face_count,
 	    assert(c == ' ' || c == '\n');
 	}
     }
+    printf("Done\n");
     return indices;
 }
 
@@ -162,7 +161,7 @@ uint32_t iVMESH_TableFind(Index* table, Index* index, uint32_t face_count) {
 }
 
 Mesh* VMESH_LoadObj(char* path) {
-    printf("loading model %s..\n", path);
+    printf("Loading model %s..\n", path);
     FILE* file = fopen(path, "r");
     uint32_t vert_count, face_count, uv_count, normal_count;
     iVMESH_CountVNTF(file, &vert_count, &face_count, &uv_count, &normal_count);
@@ -201,6 +200,8 @@ Mesh* VMESH_LoadObj(char* path) {
     }
 
     Vertex* vertices = calloc(table_len, sizeof(Vertex));
+    printf("Recalculating Vertices..");
+    fflush(stdout);
     for(int i = 0; i < face_count*3; i++) {
 	uint32_t j = mesh_indices[i];
 	uint32_t p = lookup_table[j].pos - 1;
@@ -216,11 +217,11 @@ Mesh* VMESH_LoadObj(char* path) {
 	vertices[j].normal[1] = normals[3*n+1];
 	vertices[j].normal[2] = normals[3*n+2];
 	if (uv_count) {
-	    vertices[j].tex[0] = uvs[t*2
-				     +0];
+	    vertices[j].tex[0] = uvs[t*2+0];
 	    vertices[j].tex[1] = uvs[t*2+1];
 	}
     }
+    printf(" Done\n");
     
     
     Mesh *mesh = calloc(1, sizeof(Mesh));
@@ -229,15 +230,20 @@ Mesh* VMESH_LoadObj(char* path) {
     mesh->vertex_count = out_vertex_count;
     mesh->index_count = face_count*3;
 
+    printf("Tidying Up.. ");
+    fflush(stdout);
     free(mapped_indices);	
     free(lookup_table);
     free(indices);
     free(positions);
-    free(normals);
-    free(uvs);
+    if (normal_count) {
+	free(normals);
+    } if (uv_count) {
+	free(uvs);
+    }
     fclose(file);
-    
-    printf("loaded model %s\n", path);
+    printf("Done\n");
+    printf("Loaded model %s\n", path);
     return mesh;
 }
 
