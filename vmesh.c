@@ -11,13 +11,6 @@
 #define KEY_SIZE = (INDEX_SIZE*INDEX_SIZE*INDEX_SIZE)
 #define LOOKUP_TABLE_SIZE (KEY_SIZE*INDEX_SIZE);
 
-struct Mesh {
-    Vertex *vertices;
-    uint32_t *indices;
-    uint32_t index_count;
-    uint32_t vertex_count;
-};
-
 Vertex* VMESH_Vertices(Mesh* mesh) {
     return mesh->vertices;
 }
@@ -160,7 +153,11 @@ uint32_t iVMESH_TableFind(Index* table, Index* index, uint32_t face_count) {
     assert("How the hell");
 }
 
-Mesh* VMESH_LoadObj(char* path) {
+Mesh* VMESH_New() {
+    return (Mesh*)calloc(1, sizeof(Mesh));
+}
+
+void VMESH_LoadObj(Mesh* mesh, char* path) {
     printf("Loading model %s..\n", path);
     FILE* file = fopen(path, "r");
     uint32_t vert_count, face_count, uv_count, normal_count;
@@ -222,9 +219,7 @@ Mesh* VMESH_LoadObj(char* path) {
 	}
     }
     printf(" Done\n");
-    
-    
-    Mesh *mesh = calloc(1, sizeof(Mesh));
+        
     mesh->vertices = vertices;
     mesh->indices = mesh_indices;
     mesh->vertex_count = out_vertex_count;
@@ -244,7 +239,6 @@ Mesh* VMESH_LoadObj(char* path) {
     fclose(file);
     printf("Done\n");
     printf("Loaded model %s\n", path);
-    return mesh;
 }
 
 

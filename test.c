@@ -1,10 +1,11 @@
 #include "vmesh.h"
 #include <stdio.h>
 
-int main() {    
-    Mesh* mesh =VMESH_LoadObj("../vmesh/teapot_normals.obj");
-    Vertex *vertices = VMESH_Vertices(mesh);
-    uint32_t *index = VMESH_Indices(mesh);
+int main() {
+    Mesh* mesh = VMESH_New();
+    VMESH_LoadObj(mesh, "../vmesh/teapot_normals.obj");
+    Vertex *vertices = mesh->vertices;
+    uint32_t *index = mesh->indices;
     for(int i = 0; i < 100; i++) {
 	int j = index[i];
 	printf("%d: %f %f %f : %f %f %f\n", j,

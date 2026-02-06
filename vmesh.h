@@ -8,14 +8,24 @@ typedef struct {
     float tex[2];
 } Vertex;
 
-Vertex* VMESH_Vertices(Mesh* mesh);
+struct Mesh {
+    Vertex *vertices;
+    uint32_t *indices;
+    uint32_t index_count;
+    uint32_t vertex_count;
+};
 
-uint32_t VMESH_VertexCount(Mesh* mesh);
+/* Vertex* VMESH_Vertices(Mesh* mesh); */
 
-uint32_t VMESH_IndicesCount(Mesh* mesh);
+/* uint32_t VMESH_VertexCount(Mesh* mesh); */
 
-uint32_t *VMESH_Indices(Mesh* mesh);
+/* uint32_t VMESH_IndicesCount(Mesh* mesh); */
 
-Mesh *VMESH_LoadObj(char* path);
+/* uint32_t *VMESH_Indices(Mesh* mesh); */
+
+
+Mesh* VMESH_New();
+
+void VMESH_LoadObj(Mesh* mesh, char* path);
 
 void VMESH_Destroy(Mesh* mesh);
