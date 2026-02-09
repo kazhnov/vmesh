@@ -67,7 +67,7 @@ Index* iVMESH_ParseObjIndices(FILE *file, uint32_t face_count,
     ) {
     rewind(file);
     Index* indices = calloc(face_count*3, sizeof(Index));
-    printf("Getting Data.. ");
+    printf("Gettting vertex and index count.. ");
     fflush(stdout);
     
     *positions = calloc(vcount*3, sizeof(float));
@@ -189,14 +189,12 @@ void VMESH_LoadObj(Mesh* mesh, char* path) {
 	}
     }
 
-    uint32_t table_len;
-
     uint32_t *mesh_indices = malloc(face_count*3 * sizeof(uint32_t));
     for (int i = 0; i < face_count*3; i++) {
 	mesh_indices[i] = mapped_indices[i];
     }
 
-    Vertex* vertices = calloc(table_len, sizeof(Vertex));
+    Vertex* vertices = calloc(face_count*3, sizeof(Vertex));
     printf("Recalculating Vertices..");
     fflush(stdout);
     for(int i = 0; i < face_count*3; i++) {

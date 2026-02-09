@@ -13,5 +13,6 @@ int main() {
 	       vertices[j].normal[0], vertices[j].normal[1], vertices[j].normal[2]);
     }
     printf("OK\n");
+    VMESH_Destroy(mesh);
     return 0;
 }
