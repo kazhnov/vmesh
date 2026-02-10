@@ -3,7 +3,7 @@
 
 int main() {
     Mesh* mesh = VMESH_New();
-    VMESH_LoadObj(mesh, "../vmesh/teapot_normals.obj");
+    VMESH_LoadObj(mesh, "./bunny_flatobj.obj");
     Vertex *vertices = mesh->vertices;
     uint32_t *index = mesh->indices;
     for(int i = 0; i < 100; i++) {

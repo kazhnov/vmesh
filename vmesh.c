@@ -102,29 +102,31 @@ Index* iVMESH_ParseObjIndices(FILE *file, uint32_t face_count,
 	    }
 	}
 	
-	if (c != 'f') continue;
-
-	for (int i = 0; i < 3; i++) {
+	if (c == 'f') {
+	    for (int i = 0; i < 3; i++) {
 	    
-	    uint32_t v = 0, vt = 0, vn = 0;
-	    fscanf(file, "%d", &v);
-	    c = getc(file);
-	    assert(c == '/');
+		uint32_t v = 0, vt = 0, vn = 0;
+		fscanf(file, "%d", &v);
+		c = getc(file);
+		assert(c == '/');
 	    
-	    c = getc(file); // '/' or '%d'
-	    if (c != '/') {
-		ungetc(c, file);
-		fscanf(file, "%d/", &vt);
+		c = getc(file); // '/' or '%d'
+		if (c != '/') {
+		    ungetc(c, file);
+		    fscanf(file, "%d/", &vt);
+		}
+	    
+		fscanf(file, "%d", &vn);
+		indices[cur_index].pos = v;
+		indices[cur_index].normal = vn;
+		indices[cur_index].tex = vt;
+		cur_index++;
+	    
+		c = getc(file);
+		assert(c == ' ' || c == '\n');
 	    }
-	    
-	    fscanf(file, "%d", &vn);
-	    indices[cur_index].pos = v;
-	    indices[cur_index].normal = vn;
-	    indices[cur_index].tex = vt;
-	    cur_index++;
-	    
-	    c = getc(file);
-	    assert(c == ' ' || c == '\n');
+	} else {
+	    while (c != '\n' && c != EOF) c = getc(file);
 	}
     }
     printf("Done\n");
