@@ -84,19 +84,19 @@ Index* iVMESH_ParseObjIndices(FILE *file, uint32_t face_count,
 	    c = fgetc(file);
 	    if (c == ' ') { // v %f %f %f
 		float x, y, z;
-		fscanf(file, "%f %f %f\n", &x, &y, &z);
+		fscanf(file, "%f %f %f", &x, &y, &z);
 		(*positions)[cur_pos++] = x;
 		(*positions)[cur_pos++] = y;
 		(*positions)[cur_pos++] = z;
 	    } else if (c == 'n') { // vn %f %f %f
 		float x, y, z;
-		fscanf(file, " %f %f %f\n", &x, &y, &z);
+		fscanf(file, " %f %f %f", &x, &y, &z);
 		(*normals)[cur_normal++] = x;
 		(*normals)[cur_normal++] = y;
 		(*normals)[cur_normal++] = z;
 	    } else if (c == 't') { // vt %f %f %f
 		float x, y;
-		fscanf(file, " %f %f\n", &x, &y);
+		fscanf(file, " %f %f", &x, &y);
 		(*uvs)[cur_uv++] = x;
 		(*uvs)[cur_uv++] = y;
 	    }
@@ -125,9 +125,7 @@ Index* iVMESH_ParseObjIndices(FILE *file, uint32_t face_count,
 		c = getc(file);
 		assert(c == ' ' || c == '\n');
 	    }
-	} else {
 	    while (c != '\n' && c != EOF) c = getc(file);
-	}
     }
     printf("Done\n");
     return indices;
