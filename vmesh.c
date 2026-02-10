@@ -125,11 +125,14 @@ Index* iVMESH_ParseObjIndices(FILE *file, uint32_t face_count,
 		c = getc(file);
 		assert(c == ' ' || c == '\n');
 	    }
-	    while (c != '\n' && c != EOF) c = getc(file);
+
+	}
+	while (c != '\n' && c != EOF) c = getc(file);
     }
     printf("Done\n");
     return indices;
 }
+
 
 uint32_t iVMESH_TableFind(Index* table, Index* index, uint32_t face_count) {
     for(int i = 0; i < face_count*3; i++) {
