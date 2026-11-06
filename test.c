@@ -3,7 +3,7 @@
 
 int main() {
     Mesh* mesh = VMESH_New();
-    VMESH_LoadObj(mesh, "./bunny_flatobj.obj");
+    VMESH_LoadObj(mesh, "/home/jkasinowe/gitshit/vecs/models/bumpy_floor.obj");
     Vertex *vertices = mesh->vertices;
     uint32_t *index = mesh->indices;
     for(int i = 0; i < 100; i++) {

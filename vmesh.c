@@ -6,7 +6,6 @@
 #include <assert.h>
 #include <string.h>
 
-
 #define INDEX_SIZE (4)
 #define KEY_SIZE = (INDEX_SIZE*INDEX_SIZE*INDEX_SIZE)
 #define LOOKUP_TABLE_SIZE (KEY_SIZE*INDEX_SIZE);
@@ -215,8 +214,8 @@ void VMESH_LoadObj(Mesh* mesh, char* path) {
 	vertices[j].normal[1] = normals[3*n+1];
 	vertices[j].normal[2] = normals[3*n+2];
 	if (uv_count) {
-	    vertices[j].tex[0] = uvs[t*2+0];
-	    vertices[j].tex[1] = uvs[t*2+1];
+	    vertices[j].tex[0] = uvs[2*t+0];
+	    vertices[j].tex[1] = uvs[2*t+1];
 	}
     }
     printf(" Done\n");
